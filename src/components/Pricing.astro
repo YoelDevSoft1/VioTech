@@ -1,53 +1,50 @@
 ---
-const plans = [
+const services = [
   {
-    name: "Starter",
-    price: 29,
-    description: "Perfect for small teams and startups",
+    name: "Landing Page Profesional",
+    price: 420000,
+    description: "Diseño y publicación de una landing page personalizada para tu negocio, con dominio y hosting por un año.",
     features: [
-      "Up to 5 team members",
-      "10GB storage",
-      "Basic analytics",
-      "24/7 email support",
-      "API access"
+      "Dominio .com o .co incluido 1 año",
+      "Hosting seguro 12 meses",
+      "Diseño responsive y personalizado",
+      "Optimización para captar clientes",
+      "Soporte y ajustes 30 días",
+      "Entrega en 7 días hábiles"
     ],
-    cta: "Start Free Trial",
-    popular: false,
+    cta: "Solicitar Landing Page",
+    popular: true,
     color: "primary"
   },
   {
-    name: "Professional",
-    price: 79,
-    description: "Ideal for growing businesses",
+    name: "Mantenimiento y Soporte Web",
+    price: 120000,
+    description: "Servicio único de mantenimiento correctivo y soporte técnico para tu página web o landing existente.",
     features: [
-      "Up to 20 team members",
-      "50GB storage",
-      "Advanced analytics",
-      "Priority support",
-      "API access",
-      "Custom integrations",
-      "Team collaboration tools"
+      "Revisión técnica completa",
+      "Ajustes menores y corrección de errores",
+      "Optimización de velocidad y seguridad",
+      "Asesoría básica en mejoras",
+      "Atención directa y formal",
+      "Resolución en menos de 48h"
     ],
-    cta: "Start Free Trial",
-    popular: true,
+    cta: "Solicitar Soporte",
+    popular: false,
     color: "secondary"
   },
   {
-    name: "Enterprise",
-    price: 199,
-    description: "For large organizations with complex needs",
+    name: "Asesoría Digital Básica",
+    price: 70000,
+    description: "Sesión personalizada para resolver dudas y guiarte en la digitalización de tu empresa.",
     features: [
-      "Unlimited team members",
-      "500GB storage",
-      "Enterprise analytics",
-      "Dedicated account manager",
-      "API access",
-      "Custom integrations",
-      "Team collaboration tools",
-      "Advanced security features",
-      "Custom branding"
+      "Sesión virtual de 60 minutos",
+      "Diagnóstico de necesidades",
+      "Recomendaciones de herramientas",
+      "Guía para presencia digital",
+      "Informe resumen",
+      "Descuento en otros servicios"
     ],
-    cta: "Contact Sales",
+    cta: "Agendar Asesoría",
     popular: false,
     color: "accent"
   }
@@ -58,37 +55,37 @@ const plans = [
   <div class="container-custom">
     <div class="text-center max-w-3xl mx-auto mb-16">
       <span class="inline-block px-4 py-1 rounded-full bg-accent-100 dark:bg-accent-900 text-accent-600 dark:text-accent-300 font-medium text-sm mb-4">
-        Pricing Plans
+        Servicios y Tarifas Únicas
       </span>
-      <h2 class="mb-6 text-gray-900 dark:text-white">Simple, Transparent Pricing</h2>
+      <h2 class="mb-6 text-gray-900 dark:text-white">Tecnología profesional, pago único y sin mensualidades</h2>
       <p class="text-gray-600 dark:text-gray-300">
-        Choose the plan that works best for your business. All plans include a 14-day free trial.
+        Elige el servicio que tu empresa necesita. Todos incluyen atención directa, formalidad y garantía de satisfacción.
       </p>
     </div>
     
     <div class="grid md:grid-cols-3 gap-8">
-      {plans.map((plan, index) => (
+      {services.map((service, index) => (
         <div 
-          class={`card p-6 border ${plan.popular ? `border-${plan.color}-500 dark:border-${plan.color}-400` : 'border-gray-200 dark:border-gray-700'} slide-up relative`}
+          class={`card p-6 border ${service.popular ? `border-${service.color}-500 dark:border-${service.color}-400` : 'border-gray-200 dark:border-gray-700'} slide-up relative`}
           style={`animation-delay: ${index * 150}ms`}
         >
-          {plan.popular && (
-            <div class={`absolute top-0 right-0 bg-${plan.color}-500 text-white px-4 py-1 text-sm font-medium rounded-bl-lg rounded-tr-lg`}>
-              Most Popular
+          {service.popular && (
+            <div class={`absolute top-0 right-0 bg-${service.color}-500 text-white px-4 py-1 text-sm font-medium rounded-bl-lg rounded-tr-lg`}>
+              Más solicitado
             </div>
           )}
           
-          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">{plan.name}</h3>
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">{service.name}</h3>
           <div class="mb-4">
-            <span class="text-4xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
-            <span class="text-gray-500 dark:text-gray-400">/month</span>
+            <span class="text-4xl font-bold text-gray-900 dark:text-white">${service.price.toLocaleString('es-CO')}</span>
+            <span class="text-gray-500 dark:text-gray-400">COP</span>
           </div>
-          <p class="text-gray-600 dark:text-gray-300 mb-6">{plan.description}</p>
+          <p class="text-gray-600 dark:text-gray-300 mb-6">{service.description}</p>
           
           <ul class="space-y-3 mb-8">
-            {plan.features.map(feature => (
+            {service.features.map(feature => (
               <li class="flex items-start">
-                <svg class={`w-5 h-5 text-${plan.color}-500 mr-2 shrink-0 mt-0.5`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <svg class={`w-5 h-5 text-${service.color}-500 mr-2 shrink-0 mt-0.5`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                 </svg>
                 <span class="text-gray-600 dark:text-gray-300">{feature}</span>
@@ -97,18 +94,18 @@ const plans = [
           </ul>
           
           <a 
-            href="#signup" 
-            class={`w-full btn ${plan.popular ? `bg-${plan.color}-600 hover:bg-${plan.color}-700 text-white focus:ring-${plan.color}-500` : 'btn-outline'}`}
+            href="#contacto" 
+            class={`w-full btn ${service.popular ? `bg-${service.color}-600 hover:bg-${service.color}-700 text-white focus:ring-${service.color}-500 border-${service.color}-500 dark:border-${service.color}-400` : 'btn-outline'}`}
           >
-            {plan.cta}
+            {service.cta}
           </a>
         </div>
       ))}
     </div>
     
     <div class="mt-12 text-center">
-      <p class="text-gray-600 dark:text-gray-300 mb-2">Need a custom plan for your specific needs?</p>
-      <a href="/contact" class="text-primary-600 dark:text-primary-400 font-medium hover:underline">Contact our sales team</a>
+      <p class="text-gray-600 dark:text-gray-300 mb-2">¿Tienes una necesidad diferente?</p>
+      <a href="/contacto" class="text-primary-600 dark:text-primary-400 font-medium hover:underline">Solicita una cotización personalizada</a>
     </div>
   </div>
 </section>
