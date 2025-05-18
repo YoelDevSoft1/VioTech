@@ -1,0 +1,15 @@
+---
+// src/pages/dashboard.astro
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ServiceDashboard from '../components/ServiceDashboard';
+---
+
+<Layout title="Panel de Servicios - VioTech">
+  <Header />
+  <main>
+    <ServiceDashboard client:load />
+  </main>
+  <Footer />
+</Layout>
