@@ -1,4 +1,5 @@
 ---
+import HeaderSession from "../components/HeaderSession";
 const allPages = [
   { text: "Login", url: "/login" },
   { text: "Registro", url: "/registro" },
@@ -83,18 +84,17 @@ const allPages = [
         </svg>
       </button>
 <!-- Botón Inicia sesión con btn-primary -->
-<a
-  href="/login"
-  class="hidden sm:inline-flex btn-primary px-6 py-2 rounded-lg font-semibold text-base transition"
->
-  Inicia sesión
-</a>
-<a
-  href="/registro"
-  class="hidden sm:inline-flex ml-2 px-6 py-2 rounded-lg font-semibold text-base bg-violet-50 dark:bg-violet-900 text-violet-700 dark:text-violet-200 hover:bg-violet-100 dark:hover:bg-violet-800 transition"
->
-  Registro
-</a>
+<div class="flex items-center space-x-4">
+  <button 
+    x-on:click="darkMode = !darkMode" 
+    class="p-2 rounded-full text-secondary-500 hover:text-secondary-700 dark:text-secondary-400 dark:hover:text-secondary-200 focus:outline-hidden focus:ring-2 focus:ring-primary-500"
+    aria-label="Toggle dark mode"
+  >
+    <!-- iconos del modo oscuro -->
+  </button>
+  <HeaderSession client:load />
+  <!-- ...el resto de tu menú móvil... -->
+</div>
 
       <!-- Mobile Menu Button and Dropdown -->
       <div x-data="{ open: false, showAllPages: false }">
