@@ -25,12 +25,14 @@ const allPages = [
       <img src="/logo.svg" alt="Logo de VioTech Solutions" class="h-16 w-auto max-w-[34px]" />
       <span class="ml-2 text-xl font-display font-semibold text-secondary-900 dark:text-white">VioTech</span>
     </a>
+    
     <nav class="hidden md:flex items-center space-x-8">
       <a href="/" class="text-secondary-600 hover:text-primary-600 dark:text-secondary-300 dark:hover:text-primary-400 font-medium transition-colors">Inicio</a>
       <a href="/features" class="text-secondary-600 hover:text-primary-600 dark:text-secondary-300 dark:hover:text-primary-400 font-medium transition-colors">Características</a>
       <a href="/pricing" class="text-secondary-600 hover:text-primary-600 dark:text-secondary-300 dark:hover:text-primary-400 font-medium transition-colors">Precios</a>
       <a href="/blog" class="text-secondary-600 hover:text-primary-600 dark:text-secondary-300 dark:hover:text-primary-400 font-medium transition-colors">Blog</a>
       <a href="/contact" class="text-secondary-600 hover:text-primary-600 dark:text-secondary-300 dark:hover:text-primary-400 font-medium transition-colors">Contacto</a>
+      <!-- Paginas Dropdown -->
       <div x-data="{ open: false }" class="relative">
         <button 
           @click="open = !open" 
@@ -63,6 +65,7 @@ const allPages = [
         </div>
       </div>
     </nav>
+    
     <div class="flex items-center space-x-4">
       <!-- Botón modo día/noche -->
       <button 
@@ -77,8 +80,80 @@ const allPages = [
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       </button>
-      <!-- Componente dinámico de sesión -->
+      <!-- Dinámico sesión/login -->
       <HeaderSession client:load />
+
+      <!-- Menú móvil -->
+      <div x-data="{ open: false, showAllPages: false }">
+        <button 
+          @click="open = !open"
+          class="md:hidden p-2 rounded-md text-secondary-600 hover:text-secondary-900 dark:text-secondary-300 dark:hover:text-white focus:outline-hidden focus:ring-2 focus:ring-primary-500"
+          aria-label="Toggle menu"
+        >
+          <svg x-show="!open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg x-show="open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        
+        <div 
+          x-show="open" 
+          x-transition:enter="transition ease-out duration-200"
+          x-transition:enter-start="opacity-0 scale-95"
+          x-transition:enter-end="opacity-100 scale-100"
+          x-transition:leave="transition ease-in duration-150"
+          x-transition:leave-start="opacity-100 scale-100"
+          x-transition:leave-end="opacity-0 scale-95"
+          class="absolute top-16 right-4 w-48 py-2 bg-white dark:bg-secondary-900 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden"
+          x-cloak
+        >
+          <a href="/features" class="block px-4 py-2 text-sm text-secondary-700 dark:text-secondary-300 hover:bg-secondary-100 dark:hover:bg-secondary-800">Características</a>
+          <a href="/pricing" class="block px-4 py-2 text-sm text-secondary-700 dark:text-secondary-300 hover:bg-secondary-100 dark:hover:bg-secondary-800">Precios</a>
+          <a href="/blog" class="block px-4 py-2 text-sm text-secondary-700 dark:text-secondary-300 hover:bg-secondary-100 dark:hover:bg-secondary-800">Blog</a>
+          <a href="/contact" class="block px-4 py-2 text-sm text-secondary-700 dark:text-secondary-300 hover:bg-secondary-100 dark:hover:bg-secondary-800">Contacto</a>
+          
+          <!-- Mobile Paginas Dropdown -->
+          <button 
+            @click="showAllPages = !showAllPages" 
+            class="w-full text-left px-4 py-2 text-sm text-secondary-700 dark:text-secondary-300 hover:bg-secondary-100 dark:hover:bg-secondary-800 font-semibold border-t border-gray-200 dark:border-gray-700 mt-1 pt-1 flex items-center justify-between"
+          >
+            Paginas
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" :class="{ 'transform rotate-180': showAllPages }">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          <div 
+            x-show="showAllPages" 
+            class="py-1 bg-gray-50 dark:bg-secondary-800 max-h-60 overflow-y-auto"
+          >
+            {allPages.map(page => (
+              <a href={page.url} class="block px-6 py-1 text-sm text-secondary-700 dark:text-secondary-300 hover:bg-secondary-100 dark:hover:bg-secondary-700">
+                {page.text}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </header>
+
+<style>
+  @media (prefers-color-scheme: dark) {
+    .dark\:fill-slate-800 { fill: #1e293b; }
+    .dark\:fill-slate-600 { fill: #475569; }
+    .dark\:fill-slate-500 { fill: #64748b; }
+    .dark\:fill-slate-700 { fill: #334155; }
+    .dark\:stroke-slate-300 { stroke: #cbd5e1; }
+    .dark\:stroke-teal-500 { stroke: #14b8a6; }
+    .dark\:fill-white { fill: #ffffff; }
+  }
+  header a:hover svg {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  [x-cloak] { display: none !important; }
+</style>
