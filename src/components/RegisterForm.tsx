@@ -24,7 +24,7 @@ export default function RegisterForm({ setToken }: Props) {
     setLoading(true);
     try {
       // ADAPTADO: usa la URL real del backend
-      const res = await fetch("http://localhost:4000/api/auth/registro", {
+      const res = await fetch("https://work-swhn.onrender.com/api/authregistro", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, email, password }),
