@@ -17,23 +17,30 @@ export default function LoginForm({ setToken }: Props) {
     setError("");
     setLoading(true);
     try {
-      // ADAPTADO: URL completa al backend de Node/Express+MongoDB
       const res = await fetch("https://work-swhn.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      // Si la respuesta NO es JSON válido, muestra error
+
+      // Verificar si la respuesta es JSON
       const contentType = res.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
+      if (!contentType?.includes("application/json")) {
         const text = await res.text();
-        throw new Error("Error inesperado: " + text);
+        throw new Error(`Respuesta inesperada: ${text}`);
       }
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error al iniciar sesión");
-      setToken(data.token);
+
+      // Guardar token y nombre en localStorage
       localStorage.setItem("authToken", data.token);
-      window.location.href = "/dashboard"; // Redirige al dashboard tras login exitoso
+      localStorage.setItem("userName", data.nombre); // <-- ¡Aquí se guarda el nombre!
+
+      // Actualizar el estado y redirigir
+      setToken(data.token);
+      window.location.href = "/dashboard";
+
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {

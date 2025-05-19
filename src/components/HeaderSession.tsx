@@ -1,16 +1,24 @@
+// src/components/HeaderSession.tsx
 import { useEffect, useState } from "react";
 
 export default function HeaderSession() {
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
-    setUserName(localStorage.getItem("userName"));
+    const storedName = localStorage.getItem("userName");
+    setUserName(storedName);
+
+    // Escuchar cambios en el localStorage
+    const handleStorageChange = () => {
+      setUserName(localStorage.getItem("userName"));
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userName");
-    setUserName(null);
     window.location.href = "/login";
   };
 
