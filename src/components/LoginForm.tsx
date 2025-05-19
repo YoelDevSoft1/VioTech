@@ -18,7 +18,7 @@ export default function LoginForm({ setToken }: Props) {
     setLoading(true);
     try {
       // ADAPTADO: URL completa al backend de Node/Express+MongoDB
-      const res = await fetch("https://work-swhn.onrender.com/api/authlogin", {
+      const res = await fetch("https://work-swhn.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
