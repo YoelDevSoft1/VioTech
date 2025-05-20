@@ -32,44 +32,45 @@ const {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     <ViewTransitions />
 
-    <!-- Google Ads Global Site Tag (gtag.js) -->
+    <!-- Google Ads Global Site Tag (gtag.js) compatible con TypeScript -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11146278520"></script>
     <script>
+      // Solución TypeScript: Declaración segura de dataLayer y gtag
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag(){window.dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'AW-11146278520'); // Configuración única
+      gtag('config', 'AW-11146278520');
     </script>
 
-    <!-- Alpine.js (versión estable) -->
+    <!-- Alpine.js funcional para toda la app -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js"></script>
   </head>
-
   <body class="antialiased bg-white dark:bg-secondary-950 text-secondary-900 dark:text-secondary-100 transition-colors duration-300">
     <div id="page-wrapper" class="page-transition-wrapper">
       <slot />
     </div>
-
     <script>
-      // Dark mode automático
+      // Preferencia de modo oscuro del usuario
       if (localStorage.getItem('darkMode') === null) {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         localStorage.setItem('darkMode', prefersDark ? 'true' : 'false');
         document.documentElement.classList.toggle('dark', prefersDark);
       }
 
-      // Transiciones de página Astro
+      // Manejo de transiciones de página (Astro)
       document.addEventListener('astro:page-load', () => {
         const pageWrapper = document.getElementById('page-wrapper');
-        if (pageWrapper) pageWrapper.classList.add('page-loaded');
+        if (pageWrapper) {
+          pageWrapper.classList.add('page-loaded');
+        }
       });
       document.addEventListener('astro:before-swap', () => {
         const pageWrapper = document.getElementById('page-wrapper');
-        if (pageWrapper) pageWrapper.classList.remove('page-loaded');
+        if (pageWrapper) {
+          pageWrapper.classList.remove('page-loaded');
+        }
       });
     </script>
-
-    <!-- Scripts adicionales (si los necesitas) -->
     <script src="../scripts/transitions.js"></script>
   </body>
 </html>
