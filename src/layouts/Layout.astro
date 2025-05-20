@@ -15,11 +15,14 @@ const {
 ---
 
 <!doctype html>
-<html lang="es" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))" :class="{ 'dark': darkMode }">
+<html lang="es"
+      x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }"
+      x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"
+      :class="{ 'dark': darkMode }"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Favicon adaptado a VioTech, asegúrate de tener /favicon.svg en public -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
@@ -29,20 +32,18 @@ const {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     <ViewTransitions />
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11146278520">
-</script>
-<script>
-  // Declara dataLayer en window para evitar errores de TypeScript
-  if (!('dataLayer' in window)) {
-    (window as any).dataLayer = [];
-  }
-  function gtag(){(window as any).dataLayer.push(arguments);}
-  gtag();
-
-  gtag();
-</script>
+    <!-- Google Ads Global Site Tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11146278520"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-11146278520');
+    </script>
     <!-- Fin Google Ads -->
+
+    <!-- Alpine.js para interactividad frontend -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   </head>
   <body class="antialiased bg-white dark:bg-secondary-950 text-secondary-900 dark:text-secondary-100 transition-colors duration-300">
     <div id="page-wrapper" class="page-transition-wrapper">
@@ -51,7 +52,6 @@ const {
     <script>
       // Preferencia de modo oscuro del usuario
       if (localStorage.getItem('darkMode') === null) {
-        // Detectar preferencia del sistema
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
           localStorage.setItem('darkMode', 'true');
           document.documentElement.classList.add('dark');
@@ -67,7 +67,6 @@ const {
           pageWrapper.classList.add('page-loaded');
         }
       });
-
       document.addEventListener('astro:before-swap', () => {
         const pageWrapper = document.getElementById('page-wrapper');
         if (pageWrapper) {
