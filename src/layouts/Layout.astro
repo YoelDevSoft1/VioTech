@@ -33,11 +33,14 @@ const {
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11146278520">
 </script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  // Declara dataLayer en window para evitar errores de TypeScript
+  if (!('dataLayer' in window)) {
+    (window as any).dataLayer = [];
+  }
+  function gtag(){(window as any).dataLayer.push(arguments);}
+  gtag();
 
-  gtag('config', 'AW-11146278520');
+  gtag();
 </script>
     <!-- Fin Google Ads -->
   </head>
