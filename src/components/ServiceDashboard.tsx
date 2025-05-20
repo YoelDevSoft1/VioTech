@@ -126,7 +126,7 @@ export default function ServiceDashboard() {
                 Aún no has contratado ningún servicio
               </p>
               <a 
-                href="/servicios" 
+                href="/features/" 
                 className="btn-primary inline-block"
               >
                 Ver servicios disponibles
