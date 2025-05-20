@@ -38,42 +38,38 @@ const {
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'AW-11146278520');
+      gtag('config', 'AW-11146278520'); // Configuración única
     </script>
-    <!-- Fin Google Ads -->
 
-    <!-- Alpine.js para interactividad frontend -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Alpine.js (versión estable) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js"></script>
   </head>
+
   <body class="antialiased bg-white dark:bg-secondary-950 text-secondary-900 dark:text-secondary-100 transition-colors duration-300">
     <div id="page-wrapper" class="page-transition-wrapper">
       <slot />
     </div>
+
     <script>
-      // Preferencia de modo oscuro del usuario
+      // Dark mode automático
       if (localStorage.getItem('darkMode') === null) {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          localStorage.setItem('darkMode', 'true');
-          document.documentElement.classList.add('dark');
-        } else {
-          localStorage.setItem('darkMode', 'false');
-        }
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        localStorage.setItem('darkMode', prefersDark ? 'true' : 'false');
+        document.documentElement.classList.toggle('dark', prefersDark);
       }
 
-      // Manejo de transiciones de página (Astro)
+      // Transiciones de página Astro
       document.addEventListener('astro:page-load', () => {
         const pageWrapper = document.getElementById('page-wrapper');
-        if (pageWrapper) {
-          pageWrapper.classList.add('page-loaded');
-        }
+        if (pageWrapper) pageWrapper.classList.add('page-loaded');
       });
       document.addEventListener('astro:before-swap', () => {
         const pageWrapper = document.getElementById('page-wrapper');
-        if (pageWrapper) {
-          pageWrapper.classList.remove('page-loaded');
-        }
+        if (pageWrapper) pageWrapper.classList.remove('page-loaded');
       });
     </script>
+
+    <!-- Scripts adicionales (si los necesitas) -->
     <script src="../scripts/transitions.js"></script>
   </body>
 </html>
