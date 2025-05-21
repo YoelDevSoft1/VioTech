@@ -1,15 +1,29 @@
 ---
 // src/pages/dashboard.astro
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import ServiceDashboard from '../components/ServiceDashboard';
+import Layout from '../layouts/Layout.astro'; // Ajusta la ruta a tu Layout
+import Header from '../components/Header.astro';   // Asumo que existe
+import Footer from '../components/Footer.astro';   // Asumo que existe
+import ServiceDashboard from '../components/ServiceDashboard'; // Importa el componente .tsx
 ---
 
-<Layout title="Panel de Servicios - VioTech">
-  <Header />
-  <main>
+<Layout title="Mi Panel - VioTech">
+  <Header /> {/* Tu header global */}
+  <main class="flex-grow"> {/* main puede necesitar flex-grow si el footer debe estar abajo */}
+    {/* 
+      El componente ServiceDashboard.tsx se encargará de su propia lógica
+      de verificar si el usuario está autenticado y mostrar contenido o redirigir.
+      client:load asegura que el JavaScript del componente se ejecute en el cliente.
+    */}
     <ServiceDashboard client:load />
   </main>
-  <Footer />
+  <Footer /> {/* Tu footer global */}
 </Layout>
+
+<style is:global>
+  /* Puedes añadir estilos globales aquí si es necesario, o preferiblemente en un CSS global */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura de la ventana */
+  }
+</style>

@@ -40,7 +40,7 @@ export default function RegisterForm({ setToken }: Props) {
       // Si el backend devuelve un token, lo puedes guardar (opcional)
       if (setToken && data.token) {
         setToken(data.token);
-        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("authTokenVioTech", data.token);
       }
       window.location.href = "/login"; // Redirige tras registro exitoso
     } catch (err) {

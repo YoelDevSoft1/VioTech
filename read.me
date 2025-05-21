@@ -1,0 +1,39 @@
+/VioTech
+│
+├── backend/
+│   ├── index.cjs                 # Punto de entrada principal de Express
+│   ├── .env                      # Variables de entorno (llaves Wompi, Mongo, etc)
+│   │
+│   ├── models/
+│   │   ├── User.ts
+│   │   └── Service.ts            # Modelo de Servicios (licencias, landings, ...)
+│   │
+│   ├── routes/
+│   │   ├── auth.ts               # Rutas de autenticación (registro, login)
+│   │   ├── payments.ts           # Rutas para pagos (integración Wompi)
+│   │   └── services.ts           # Rutas para CRUD de servicios
+│   │
+│   └── controllers/              # (Opcional: lógica separada)
+│       ├── authController.ts
+│       ├── paymentController.ts
+│       └── serviceController.ts
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── PaymentButton.tsx
+│   │   │   └── ...otros componentes...
+│   │   ├── layouts/
+│   │   │   └── Layout.astro
+│   │   ├── pages/
+│   │   │   ├── index.astro
+│   │   │   └── dashboard.astro
+│   │   └── ...otros archivos Astro/React...
+│   ├── public/
+│   │   └── mock/                 # (Opcional: datos mock de prueba)
+│   ├── .env                      # Variables frontend VITE_WOMPI_PUBLIC_KEY
+│   └── package.json
+│
+├── package.json                  # (Opcional, si usas workspaces/monorepo)
+└── README.md

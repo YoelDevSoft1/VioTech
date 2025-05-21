@@ -1,5 +1,36 @@
+// tsconfig.json (en la raíz de tu proyecto frontend)
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "src/**/*"],
-  "exclude": ["dist", "**/*.astro"]
+  "extends": "astro/tsconfigs/strict", // Mantén tu extensión base de Astro
+  "compilerOptions": {
+    // --- AÑADIR ESTAS OPCIONES ---
+    "baseUrl": ".", // O "src" si quieres que las rutas en 'paths' sean relativas a 'src/'
+    "paths": {
+      "@/*": ["src/*"],                     // Alias general: @/components/MiComponente.tsx -> src/components/MiComponente.tsx
+      "@components/*": ["src/components/*"],  // Específico para componentes
+      "@layouts/*": ["src/layouts/*"],        // Específico para layouts
+      "@pages/*": ["src/pages/*"],          // Específico para páginas (aunque Astro maneja esto)
+      "@assets/*": ["src/assets/*"],          // Específico para assets
+      "@utils/*": ["src/utils/*"],            // Si tienes una carpeta de utilidades
+      "@constants": ["src/constants.ts"]      // Alias directo a tu archivo constants.ts
+      // Si tu constants.ts estuviera en src/config/constants.ts, sería:
+      // "@constants": ["src/config/constants.ts"]
+    },
+    // Puedes añadir otras compilerOptions que necesites aquí, por ejemplo:
+    "jsx": "react-jsx", // O "preserve" si Astro lo maneja diferente para .tsx
+    "jsxImportSource": "react" // O "preact" si usas Preact
+    // Asegúrate de que estas opciones de JSX sean compatibles con tu configuración de Astro + React/Preact
+    // Astro podría estar ya configurando esto a través de "astro/tsconfigs/strict"
+  },
+  "include": [
+    ".astro/types.d.ts", // Generado por Astro
+    "src/**/*"             // Incluye todos los archivos dentro de src
+  ],
+  "exclude": [
+    "dist",                // Carpeta de build
+    "node_modules",        // Siempre excluir node_modules
+    "**/*.astro"           // Astro maneja sus propios archivos .astro de manera diferente
+                           // Aunque "astro/tsconfigs/strict" podría ya tener esto configurado.
+                           // Si tienes errores con archivos .astro aquí, podrías quitar esta línea
+                           // y ver si "extends" ya lo maneja.
+  ]
 }

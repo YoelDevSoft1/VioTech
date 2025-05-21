@@ -1,0 +1,138 @@
+---
+// frontend/src/components/PricingCmp.astro
+import PaymentButton from './PaymentButton.astro';
+
+const usdRate = 4000;
+// const emailClienteEjemplo = "cliente.demostracion@example.com"; // Ya no se necesita para PaymentButton
+
+const services = [
+  {
+    id: "LP_ESENCIAL_001", name: "Landing Page Esencial", price: 690000,
+    usd: (690000 / usdRate).toFixed(0), description: "Presencia profesional...",
+    features: ["Landing personalizada (1 sección)", "Dominio .com o .co (1 año)", "Hosting seguro (12 meses)", "Optimización móvil y velocidad", "Soporte y ajustes (15 días)", "Entrega en 7 días hábiles"],
+    cta: "Adquirir Plan Esencial", popular: false, themeColor: "yellow", esPersonalizado: false
+  },
+  {
+    id: "LP_PROFESIONAL_002", name: "Landing Page Profesional", price: 990000,
+    usd: (990000 / usdRate).toFixed(0), description: "Capta más leads...",
+    features: ["Hasta 4 secciones personalizadas", "Dominio .com o .co (1 año)", "Hosting seguro (12 meses)", "Formulario avanzado (WhatsApp/CRM)", "Redacción optimizada y asesoría estratégica", "Reportes de visitas y conversiones", "Soporte y mejoras (30 días)"],
+    cta: "Adquirir Plan Profesional", popular: true, themeColor: "primary", esPersonalizado: false
+  },
+  {
+    id: "LP_PREMIUM_003", name: "Landing Page Premium", price: 1390000,
+    usd: (1390000 / usdRate).toFixed(0), description: "Automatiza, mide y crece...",
+    features: ["Todo lo de Profesional", "Animaciones y recursos interactivos", "Google Analytics y Facebook Pixel", "Integración con newsletter", "Automatización WhatsApp/CRM", "Soporte y actualizaciones 60 días"],
+    cta: "Adquirir Plan Premium", popular: false, themeColor: "purple", esPersonalizado: false
+  },
+  // { // Ejemplo de plan personalizado
+  //   id: "LP_ENTERPRISE_004", name: "Solución Empresarial", price: 0, usd: "N/A",
+  //   description: "Desarrollo a medida...",
+  //   features: ["Todo lo del Plan Premium", "Integraciones complejas", "Soporte dedicado SLA", "Consultoría estratégica"],
+  //   cta: "Contactar para Cotización", popular: false, themeColor: "gray", esPersonalizado: true
+  // }
+];
+---
+
+<section id="pricing" class="section bg-gray-50 dark:bg-gray-900 py-16 md:py-24">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+      <span class="inline-block px-3 py-1.5 rounded-full bg-primary-100 dark:bg-primary-500/20 text-primary-600 dark:text-primary-300 font-semibold text-xs uppercase tracking-wider mb-4 shadow-sm">
+        Nuestros Planes
+      </span>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 dark:text-white">Encuentra la Solución Perfecta</h2>
+      <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400">
+        Planes transparentes y completos, diseñados para llevar tu presencia online al siguiente nivel.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 items-stretch">
+      {services.map((service, index) => {
+        let buttonSpecificClasses = "";
+        if (service.popular) {
+          buttonSpecificClasses = "bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-300 dark:focus:ring-primary-800";
+        } else if (service.themeColor === "purple") {
+          buttonSpecificClasses = "bg-purple-600 hover:bg-purple-700 text-white focus:ring-purple-300 dark:focus:ring-purple-800";
+        } else if (service.themeColor === "yellow") {
+          buttonSpecificClasses = "bg-yellow-500 hover:bg-yellow-600 text-white focus:ring-yellow-300 dark:focus:ring-yellow-800";
+        } else {
+          buttonSpecificClasses = "bg-green-500 hover:bg-green-600 text-white focus:ring-green-300 dark:focus:ring-green-800";
+        }
+        const buttonBaseClasses = "w-full text-center px-6 py-3.5 rounded-lg font-semibold text-base md:text-lg transition-colors duration-200 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-4";
+        const finalButtonClassName = `${buttonBaseClasses} ${buttonSpecificClasses}`;
+
+        let featureIconClasses = "w-5 h-5 mr-2.5 shrink-0 mt-0.5 ";
+        if (service.themeColor === "primary") featureIconClasses += "text-primary-500 dark:text-primary-400";
+        else if (service.themeColor === "purple") featureIconClasses += "text-purple-500 dark:text-purple-400";
+        else if (service.themeColor === "yellow") featureIconClasses += "text-yellow-500 dark:text-yellow-400";
+        else featureIconClasses += "text-green-500 dark:text-green-400";
+        
+        return (
+          <div 
+            class:list={[
+              "bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 flex flex-col transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]",
+              { "border-2 border-primary-500 dark:border-primary-400 relative lg:scale-[1.03] z-10": service.popular },
+              { "border border-gray-200 dark:border-gray-700": !service.popular }
+            ]}
+            // data-aos="fade-up" 
+            // data-aos-delay={index * 100}
+          >
+            {service.popular && (
+              <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-primary-600 text-white px-5 py-1.5 text-sm font-semibold rounded-full shadow-lg tracking-wide whitespace-nowrap z-20">
+                Más Elegido
+              </div>
+            )}
+            <h3 class="text-2xl font-semibold mt-4 mb-3 text-gray-900 dark:text-white text-center">{service.name}</h3>
+            
+            <div class="mb-5 text-center">
+              <span class="text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white">
+                ${service.price.toLocaleString('es-CO')}
+              </span>
+              <span class="text-base text-gray-500 dark:text-gray-400 align-baseline"> COP</span>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                (Aprox. USD ${service.usd}) Un solo pago
+              </p>
+            </div>
+
+            <p class="text-gray-600 dark:text-gray-400 mb-6 text-center min-h-[4.5rem] sm:min-h-[3em]">{service.description}</p>
+            
+            <ul class="space-y-3 mb-8 flex-grow">
+              {service.features.map(featureText => (
+                <li class="flex items-start">
+                  <svg class={featureIconClasses} viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                  <span class="text-sm sm:text-base text-gray-700 dark:text-gray-300">{featureText}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div class="mt-auto w-full pt-4">
+              {service.esPersonalizado ? (
+                <a 
+                  href="/contacto" 
+                  class={`${buttonBaseClasses} bg-gray-600 hover:bg-gray-700 text-white focus:ring-gray-300 dark:focus:ring-gray-800`}
+                >
+                  {service.cta}
+                </a>
+              ) : (
+                <PaymentButton
+                  amount={service.price}
+                  serviceId={service.id}
+                  buttonText={service.cta}
+                  className={finalButtonClassName}
+                />
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    <div class="mt-16 text-center">
+      <p class="text-gray-600 dark:text-gray-400 mb-3 text-lg">¿Requieres una solución a la medida de tu empresa?</p>
+      <a href="/contacto" class="text-primary-600 dark:text-primary-400 font-semibold hover:underline text-lg px-6 py-3 rounded-md hover:bg-primary-100 dark:hover:bg-primary-500/10 transition-colors">
+        Contáctanos para una Cotización Personalizada
+      </a>
+    </div>
+  </div>
+</section>

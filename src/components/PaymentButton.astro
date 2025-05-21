@@ -1,0 +1,146 @@
+---
+// frontend/src/components/PaymentButton.astro
+// Importa la constante si pudieras hacerla accesible aquí (ver nota abajo)
+// Por ahora, la definimos directamente en el frontmatter para pasarla al script.
+export const TOKEN_KEY_FROM_CONSTANTS = "authTokenVioTech"; // Debe coincidir con src/constants.ts
+
+export interface Props {
+  amount: number;
+  serviceId: string;
+  buttonText?: string;
+  className?: string;
+}
+
+const {
+  amount,
+  serviceId,
+  buttonText = `Pagar $${amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 })}`, // Formato de moneda COP
+  className = "bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg w-full text-center transition-colors duration-200 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800 disabled:opacity-70" // Clases por defecto, con estilo para 'disabled'
+} = Astro.props;
+
+const backendApiUrl = import.meta.env.PUBLIC_BACKEND_API_URL || 'http://localhost:4000';
+const originalButtonText = buttonText;
+---
+
+<div class="payment-button-container w-full">
+  <button 
+    id={`wompiPayButton-${serviceId}`}
+    class:list={[className]}
+    data-amount={amount}
+    data-service-id={serviceId}
+    data-original-text={originalButtonText}
+    type="button"
+    aria-live="polite"
+  >
+    {buttonText}
+  </button>
+  <p 
+    id={`paymentError-${serviceId}`} 
+    class="text-red-600 dark:text-red-400 text-sm font-medium mt-2.5 text-center" 
+    style="display: none;"
+    role="alert"
+  ></p>
+</div>
+
+<script define:vars={{ 
+  apiBaseUrl: backendApiUrl, 
+  currentServiceId: serviceId, 
+  btnOriginalText: originalButtonText,
+  localStorageTokenKey: TOKEN_KEY_FROM_CONSTANTS // <--- Pasamos la clave correcta al script
+}}>
+  const payButton = document.getElementById(`wompiPayButton-${currentServiceId}`);
+  const paymentErrorElement = document.getElementById(`paymentError-${currentServiceId}`);
+
+  // Debug inicial
+  // console.log(`PaymentButton Script (${currentServiceId}): Inicializado. API: ${apiBaseUrl}. TokenKey: ${localStorageTokenKey}`);
+
+  if (!payButton || !paymentErrorElement) {
+    console.error(`PaymentButton Script (${currentServiceId}): No se encontró el botón o el elemento de error.`);
+  } else {
+    payButton.addEventListener('click', async () => {
+      console.log(`PaymentButton Script (${currentServiceId}): Clic en botón.`);
+
+      payButton.disabled = true;
+      payButton.innerHTML = `
+        <span class="flex items-center justify-center">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Procesando...
+        </span>`;
+      paymentErrorElement.style.display = 'none';
+      paymentErrorElement.textContent = '';
+
+      const amountFromData = parseFloat(payButton.dataset.amount);
+      const serviceIdFromData = payButton.dataset.serviceId;
+
+      if (isNaN(amountFromData) || !serviceIdFromData) {
+        console.error(`PaymentButton Script (${currentServiceId}): Datos del botón inválidos.`, { amountFromData, serviceIdFromData });
+        paymentErrorElement.textContent = "Error: Datos internos inválidos. Intente recargar la página.";
+        paymentErrorElement.style.display = 'block';
+        payButton.disabled = false;
+        payButton.textContent = btnOriginalText;
+        return;
+      }
+
+      console.log(`PaymentButton Script (${currentServiceId}): Obteniendo token con clave '${localStorageTokenKey}'`);
+      const token = localStorage.getItem(localStorageTokenKey); // <--- USA LA CLAVE PASADA POR define:vars
+
+      if (!token) {
+        console.warn(`PaymentButton Script (${currentServiceId}): No se encontró token de autenticación en localStorage con la clave '${localStorageTokenKey}'.`);
+        paymentErrorElement.textContent = "Error: Sesión no iniciada. Por favor, inicie sesión para continuar.";
+        paymentErrorElement.style.display = 'block';
+        // Opcional: Redirigir a login
+        // setTimeout(() => { window.location.href = '/login?from=/precios'; }, 2000);
+        payButton.disabled = false;
+        payButton.textContent = btnOriginalText;
+        return;
+      }
+      console.log(`PaymentButton Script (${currentServiceId}): Token encontrado.`);
+
+      try {
+        const endpoint = `${apiBaseUrl}/api/payments/create-transaction`;
+        console.log(`PaymentButton Script (${currentServiceId}): Llamando a API: POST ${endpoint}`);
+        
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            amount: amountFromData,
+            serviceId: serviceIdFromData
+          })
+        });
+
+        console.log(`PaymentButton Script (${currentServiceId}): Respuesta del backend - Status: ${response.status}`);
+        const responseData = await response.json();
+        console.log(`PaymentButton Script (${currentServiceId}): Respuesta del backend - Data:`, responseData);
+
+        if (!response.ok) {
+          const errorMsg = responseData?.error || responseData?.details || responseData?.message || `Error del servidor (${response.status})`;
+          console.error(`PaymentButton Script (${currentServiceId}): Error en respuesta del backend - ${errorMsg}`);
+          throw new Error(String(errorMsg));
+        }
+
+        if (responseData && responseData.checkout_url) {
+          console.log(`PaymentButton Script (${currentServiceId}): Redirigiendo a Wompi: ${responseData.checkout_url}`);
+          window.location.href = responseData.checkout_url;
+          // No se re-habilita el botón aquí porque la página va a cambiar.
+        } else {
+          console.error(`PaymentButton Script (${currentServiceId}): No se recibió checkout_url en la respuesta.`);
+          throw new Error('Respuesta inválida del servidor, no se pudo obtener la URL de pago.');
+        }
+
+      } catch (error) {
+        console.error(`PaymentButton Script (${currentServiceId}): Catch - Error al procesar el pago:`, error);
+        paymentErrorElement.textContent = `Error: ${error.message || 'Ocurrió un problema desconocido al procesar el pago.'}`;
+        paymentErrorElement.style.display = 'block';
+        payButton.disabled = false;
+        payButton.textContent = btnOriginalText; // Restaura el texto original
+      }
+    });
+  }
+</script>
